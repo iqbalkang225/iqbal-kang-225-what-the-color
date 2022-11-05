@@ -1,19 +1,47 @@
 import {backgroundColor, generateRandomColors, correctAnswer} from './utils/utilFunctions'
 import Button from './components/Button';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import ScoreBoard from './components/ScoreBoard';
 
 function App() {
 
   const [colors, setColors] = useState(generateRandomColors())
   const [correctColor, setCorrectColor] = useState(correctAnswer())
+  const [score, setScore] = useState(0)
+  const [correctAnswers, setCorrectAnswers] = useState(0)
+  const [result, setResult] = useState('')
+  const [backVisible, setBackVisible] = useState(false)
+  const isFirstRender = useRef(true)
 
   useEffect(() => {
     generateRandomColors()
     setCorrectColor(correctAnswer())
   },[])
 
+  useEffect(() => {
+
+    if(isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
+    setBackVisible(prevState => !prevState)
+
+    const interval = setTimeout(() => setBackVisible(prevState => !prevState), 2000)
+    return () => clearInterval(interval)
+  }, [colors])
+
+
   const clickHandler = (index) => {
-    if(index === correctColor) console.log('correct')
+    if(index === correctColor) {
+      setScore(prevState => prevState + 1)
+      setCorrectAnswers(prevState => prevState + 1)
+      setResult('Awesome!')
+    }
+    else {
+      setCorrectAnswers(0)
+      setResult('Oops!')
+    }
     setCorrectColor(correctAnswer())
     setColors(generateRandomColors())
   }
@@ -22,13 +50,24 @@ function App() {
   
   return (
    <div 
-    className = 'w-screen h-screen flex justify-center items-center'
+    className = 'w-screen h-screen flex justify-center items-center relative'
     style = {backgroundColor(colors, correctColor, 90)}
     >
-    <div 
-      className='w-1/2 h-1/2 flex items-end justify-evenly pb-2 shadow-xl rounded-lg' 
-      style = {backgroundColor(colors, correctColor)}>
-      { colors.map((color,index) => <Button key = {index} onclick = {clickHandler.bind(null, index)}> {color} </Button>) }
+    <ScoreBoard> {score} </ScoreBoard>
+    <div className={`relative w-96 h-96 overflow-hidden rounded-lg card ${backVisible ? 'flip' : ''}`}>
+      {/* Card Front */}
+      <div 
+        className='h-full flex items-end justify-evenly pb-4 shadow-xl front' 
+        style = {backgroundColor(colors, correctColor)}>
+        { colors.map((color,index) => <Button key = {index} onclick = {clickHandler.bind(null, index)}> {color} </Button>) }
+      </div>
+      {/* Card Back */}
+      <div className='absolute top-0 h-full bg-white w-full flex flex-col justify-center items-center back'>
+        <h2 className='text-4xl mb-4'> {result} </h2>
+        {result === 'Oops!' && <h2 className='text-sm'>Better luck next time</h2>}
+        {correctAnswers > 1 && <h2 className='text-xl'>Current streak: 🔥 {correctAnswers}</h2>}
+        {correctAnswers > 1 && <h2 className='text-sm'>Keep Going...!!!</h2>}
+      </div>
     </div>
    </div>
   );

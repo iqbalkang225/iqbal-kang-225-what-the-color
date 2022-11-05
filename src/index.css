@@ -7,3 +7,27 @@
   transform: rotate(180deg);
   backface-visibility: hidden;
 } */
+
+.card{
+  perspective: 1500;
+  transform-style: preserve-3d;
+}
+
+.front{
+  backface-visibility: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.back{
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.card.flip .front{
+  transform: rotateY(180deg);
+}
+
+.card.flip .back{
+  transform: rotateY(0deg);
+}
