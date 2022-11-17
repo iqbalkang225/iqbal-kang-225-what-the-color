@@ -14,7 +14,8 @@ const generateRandomColors = () => {
 // function to generate a random number which will be set as correct color
 const correctAnswer = () => Math.floor(Math.random() * 3)
 
-// function to set correctColor as the background color
+// function to set correctColor as the background color (tailwind workaround)
+// output: backgroundColor: hexColor Opacity (eg. #ffffff80)
 const backgroundColor = (colors, correctColor, opacity) => ( 
   {backgroundColor: `${colors[correctColor]}${opacity ? opacity : ''}`} )
 

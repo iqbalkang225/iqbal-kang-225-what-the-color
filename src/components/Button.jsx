@@ -4,7 +4,8 @@ const Button = ( {onclick, children} ) => {
     <button 
       className='px-3 py-1 border-2 rounded-full '
       onClick = {onclick}
-      > {children} </button>
+      > {children} 
+    </button>
   )
 }
 

@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* .flip{
-  perspective: 1000;
-  transform: rotate(180deg);
-  backface-visibility: hidden;
-} */
-
 .card{
   perspective: 1500;
   transform-style: preserve-3d;

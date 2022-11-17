@@ -14,12 +14,7 @@ function App() {
   const isFirstRender = useRef(true)
 
   useEffect(() => {
-    generateRandomColors()
-    setCorrectColor(correctAnswer())
-  },[])
-
-  useEffect(() => {
-
+    // To avoid card flip at initial load
     if(isFirstRender.current) {
       isFirstRender.current = false
       return
@@ -42,8 +37,8 @@ function App() {
       setStreakAnswers(0)
       setResult('Oops!')
     }
-    setCorrectColor(correctAnswer())
     setColors(generateRandomColors())
+    setCorrectColor(correctAnswer())
   }
 
   return (
